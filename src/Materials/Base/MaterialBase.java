@@ -1,22 +1,25 @@
-package Materials;
+package Materials.Base;
+
+import java.awt.Color;
 
 public abstract class MaterialBase {
-    String name;
-    int xCord;
-    int yCord;
-    double density;
-    boolean isProcessed;
+    public String name;
+    public int xCord;
+    public int yCord;
+    public double density;
+    public AggregateStates state;
+    public Color BaseColor;
 
-    public void swap(MaterialBase other){
-        int xtemp = this.xCord;
-        int yTemp = this.yCord;
-
-        this.xCord = other.xCord;
-        this.yCord = other.yCord;
-
-        other.xCord = xtemp;
-        other.yCord = yTemp;
+    enum AggregateStates {
+        solid,
+        liquid,
+        gaseous
     }
 
-    abstract void Update();
+    public MaterialBase(int xCord, int yCord){
+        this.xCord = xCord;
+        this.yCord = yCord;
+    }
+
+    public abstract MaterialBase[][] Update(MaterialBase[][] map);
 }
