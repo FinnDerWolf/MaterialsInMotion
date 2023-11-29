@@ -1,6 +1,6 @@
-## Getting Started
+## General
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+MaterialsInMotion is a hobby project, in the scope of studying Computer Science. It is supposed to be a basic physics/behavior simulation programmed using the basic and some advanced princeples of Object Oriented Programming.
 
 ## Folder Structure
 
@@ -11,8 +11,3 @@ The workspace contains two folders by default, where:
 
 Meanwhile, the compiled output files will be generated in the `bin` folder by default.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
