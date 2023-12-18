@@ -1,14 +1,15 @@
-import Logik.*;
+import javax.swing.SwingUtilities;
+
+import Logik.Game;
 public class App {
-    //Const
-    final static int Width = 70;
-    final static int Height = 50;
-
-    public static void main(String[] args) throws Exception {
-        Game game = new Game(Width, Height);
-        game.Run();
+    public static void main(String[] args) {
+        /*SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Game();
+            }
+        });*/
+        new Game();
     }
-
-    
 }
 

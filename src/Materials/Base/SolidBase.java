@@ -1,7 +1,8 @@
 package Materials.Base;
-import java.util.SplittableRandom;
 
-public abstract class SolidBase extends MaterialBase{
+import Logik.IMaterialUpdate;
+
+public abstract class SolidBase extends MaterialBase implements IMaterialUpdate{
     
     public SolidBase(int xCord, int yCord){
         super(xCord, yCord);
@@ -10,40 +11,57 @@ public abstract class SolidBase extends MaterialBase{
 
     }
 
-    public MaterialBase[][] Update(MaterialBase[][] map){
-        MaterialBase down = map[yCord-1][xCord];
-        MaterialBase downLeft = map[yCord-1][xCord-1];
-        MaterialBase downRight = map[yCord-1][xCord+1];
+    //Interface implementation
+    @Override
+    public MaterialBase[][] Update(MaterialBase[][] map) {
+        this.isHandled = true;
         
-        if(canSwap(down)){
-            map[yCord][xCord] = down;
-            map[yCord-1][xCord] = this;
-            return map;
-        }
+        var fieldsOfInterest = getFieldsOfInterest(map);
 
-        SplittableRandom random = new SplittableRandom();
-        int randomNumber = random.nextInt();
-
-        if (randomNumber % 2 == 0) {
-            if (canSwap(downRight)) {
-                map[yCord][xCord] = downRight;
-                map[yCord-1][xCord+1] = this;
+        for (MaterialBase field : fieldsOfInterest) {
+            if(canSwap(field)){
+                map = swap(map, field);
                 return map;
             }
         }
 
-        else if(canSwap(downLeft)){
-            map[yCord][xCord] = downLeft;
-            map[yCord-1][xCord-1] = this;
-            return map;
-        }
-        
         return map;
     }
 
-    private boolean canSwap(MaterialBase field){
-        //is Gas
-       if(field.state == AggregateStates.gaseous){
+    @Override
+    public MaterialBase[] getFieldsOfInterest(MaterialBase[][] map){
+        var result = new MaterialBase[3];
+
+        //randomize direction priority 
+        var randomInt = Math.round(Math.random());
+
+        //down
+        result[0] = getField(map, this.xCord, this.yCord+1);
+
+        //Prioritize left
+        if(randomInt > 0){
+            //down-left and down-right
+            result[1] = getField(map, this.xCord-1, this.yCord+1);
+            result[2] = getField(map, this.xCord+1, this.yCord+1);
+        }
+        //Prioritize right
+        else{
+            //up-right and up-left
+            result[1] = getField(map, this.xCord+1, this.yCord+1);
+            result[2] = getField(map, this.xCord-1, this.yCord+1);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean canSwap(MaterialBase field){
+        //Solids try to swap downwards
+        //is null
+        if(field == null){
+            return false;
+        }
+        //is less dense Gas
+        if(field.state == AggregateStates.gaseous && field.density < this.density){
             return true;
         }  
         //is less dense Liquid
@@ -52,5 +70,21 @@ public abstract class SolidBase extends MaterialBase{
         }
 
         return false;
+    }
+
+    @Override
+    public MaterialBase[][] swap(MaterialBase[][] map, MaterialBase field){
+        map[this.yCord][this.xCord] = field;
+        map[field.yCord][field.xCord] = this;
+
+        Object tempStore = this.xCord;
+        this.xCord = field.xCord;
+        field.xCord = (int) tempStore;
+
+        tempStore = this.yCord;
+        this.yCord = field.yCord;
+        field.yCord = (int) tempStore;
+
+        return map;
     }
 }

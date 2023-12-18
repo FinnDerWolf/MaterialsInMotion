@@ -1,6 +1,8 @@
 package Materials.Base;
 
-public abstract class ImovableBase extends MaterialBase{
+import Logik.IMaterialUpdate;
+
+public abstract class ImovableBase extends MaterialBase implements IMaterialUpdate{
     
     public ImovableBase(int xCord, int yCord){
         super(xCord, yCord);
@@ -8,7 +10,10 @@ public abstract class ImovableBase extends MaterialBase{
         this.state = AggregateStates.gaseous;
     }
 
-    public MaterialBase[][] Update(MaterialBase[][] map){
-        return map;
-    }
+        //Interface implementation
+        @Override
+        public MaterialBase[][] Update(MaterialBase[][] map){
+            this.isHandled = true;
+            return map;
+        }
 }

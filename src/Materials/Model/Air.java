@@ -8,8 +8,8 @@ public class Air extends GasBase{
     public Air(int xCord, int yCord){
         super(xCord, yCord);
 
-        this.name = "Air";
-        this.density = 1.225;
+        this.Name = "Air";
         this.BaseColor = new Color(162, 241, 245);
+        this.density = 1.225;
     }
 }
