@@ -16,4 +16,22 @@ public abstract class ImovableBase extends MaterialBase implements IMaterialUpda
             this.isHandled = true;
             return map;
         }
+
+        @Override
+        public boolean canSwap(MaterialBase field) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public MaterialBase[][] swap(MaterialBase[][] map, MaterialBase field) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public MaterialBase[] getFieldsOfInterest(MaterialBase[][] map) {
+            // TODO Auto-generated method stub
+            return null;
+        }
 }

@@ -2,8 +2,9 @@ package Logik;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class GameMouseListener implements MouseListener{
+public class GameMouseListener implements MouseListener, MouseMotionListener{
     private final Game Parent;
 
     public int widthModifier;
@@ -33,6 +34,14 @@ public class GameMouseListener implements MouseListener{
     }
 
     @Override
+    public void mouseDragged(MouseEvent e) {
+        var x = (int)Math.floor(e.getX() / widthModifier);
+        var y = (int)Math.floor(e.getY()/ heightModifier);
+
+        Parent.spawnMaterial(x, y);
+    }
+
+    @Override
     public void mouseReleased(MouseEvent e) {
         //System.out.println("Mouse " + e.getClickCount() + " times released at "
         //        + e.getPoint());
@@ -46,5 +55,10 @@ public class GameMouseListener implements MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
         //System.out.println("Mouse exited at " + e.getPoint());
+    }
+    
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        
     }
 }

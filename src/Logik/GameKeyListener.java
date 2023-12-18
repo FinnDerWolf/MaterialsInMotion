@@ -3,14 +3,10 @@ package Logik;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import Logik.MaterialBrush.Materials;
+
 public class GameKeyListener extends KeyAdapter{
     public MaterialBrush influencedBrush;
-
-    enum Materials {
-        Sand,
-        Air,
-        Water
-    }
 
     public GameKeyListener(MaterialBrush brush){
         this.influencedBrush = brush;
@@ -29,6 +25,15 @@ public class GameKeyListener extends KeyAdapter{
                 break;
             case 51:
                 influencedBrush.setMaterial(Materials.Air);
+                break;
+            case 52:
+                influencedBrush.setMaterial(Materials.Stone);
+                break;
+            case KeyEvent.VK_UP:
+                influencedBrush.increaseSize();
+                break;
+            case KeyEvent.VK_DOWN:
+                influencedBrush.decreaseSize();
                 break;
         }
     }

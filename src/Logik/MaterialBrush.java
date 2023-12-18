@@ -1,10 +1,15 @@
 package Logik;
 
-import Logik.GameKeyListener.Materials;
-
 public class MaterialBrush {
     public int size;
     public Materials Material;
+
+    enum Materials {
+        Sand,
+        Air,
+        Water,
+        Stone
+    }
 
     public MaterialBrush(){
         size = 1;
@@ -17,5 +22,13 @@ public class MaterialBrush {
 
     public void setSize(int size){
         this.size = size;
+    }
+
+    public void increaseSize(){
+        size++;
+    }
+
+    public void decreaseSize(){
+        size--;
     }
 }

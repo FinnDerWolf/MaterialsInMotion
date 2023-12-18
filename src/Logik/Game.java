@@ -12,8 +12,8 @@ import Materials.Model.*;
 
 public class Game extends JFrame{
     //Finals
-    final static int WIDTH = 40;
-    final static int HEIGHT = 40;
+    final static int WIDTH = 80;
+    final static int HEIGHT = 80;
     final static int WIDTHMODIFIER = 10;
     final static int HEIGHTMODIFIER = 10;
     final static int DELAY = 80;
@@ -22,6 +22,7 @@ public class Game extends JFrame{
     GameMouseListener MouseListener;
     GameKeyListener KeyListener;
     private BufferedImage buffer;
+    private Graphics2D bufferGraphics;
 
     //Game Variables
     boolean running = true;
@@ -66,6 +67,7 @@ public class Game extends JFrame{
 
         MouseListener = new GameMouseListener(this, WIDTHMODIFIER, HEIGHTMODIFIER);
         this.addMouseListener(MouseListener);
+        this.addMouseMotionListener(MouseListener);
 
         KeyListener = new GameKeyListener(Brush);
         this.addKeyListener(KeyListener);
@@ -82,6 +84,7 @@ public class Game extends JFrame{
         setSize(WIDTH*WIDTHMODIFIER, HEIGHT*HEIGHTMODIFIER);
 
         buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        bufferGraphics = buffer.createGraphics();
 
         setFocusable(true);
         requestFocusInWindow();
@@ -177,6 +180,9 @@ public class Game extends JFrame{
             case Air: 
                 tempMaterial = new Air(xCord, yCord);
                 break;
+            case Stone: 
+                tempMaterial = new Stone(xCord, yCord);
+                break;
         }
 
         itemMap[yCord][xCord] = tempMaterial;
@@ -187,23 +193,14 @@ public class Game extends JFrame{
 
     @Override
     public void paint(java.awt.Graphics g) {
-        Graphics2D bufferGraphics = (Graphics2D) buffer.getGraphics();
 
-        // Clear the off-screen image
-        bufferGraphics.setColor(getBackground());
-        bufferGraphics.fillRect(0, 0, getWidth(), getHeight());
-
-        // Draw on the off-screen image
         for (int row = 0; row < colorMap.length; row++) {
             for (int collumn = 0; collumn < colorMap[row].length; collumn++) {
 
-                bufferGraphics.setColor(colorMap[row][collumn]);
+                g.setColor(colorMap[row][collumn]);
 
-                bufferGraphics.fillRect(collumn * WIDTHMODIFIER, row * HEIGHTMODIFIER, WIDTHMODIFIER, HEIGHTMODIFIER);
-
+                g.fillRect(collumn * WIDTHMODIFIER, row * HEIGHTMODIFIER, WIDTHMODIFIER, HEIGHTMODIFIER);
             }
         }
-        // Copy the off-screen image to the screen
-        g.drawImage(buffer, 0, 0, this);
     }
 }
