@@ -6,7 +6,11 @@ public class App {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Game();
+                //Game game1 = new Game(true);
+                //game1.run();
+
+                Game game2 = new Game(true);
+                game2.run();
             }
         });
     }

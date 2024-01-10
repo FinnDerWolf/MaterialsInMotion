@@ -2,22 +2,23 @@ package Logik;
 
 public class MaterialBrush {
     public int size;
-    public Materials Material;
+    public Materials material;
 
     enum Materials {
         Sand,
         Air,
         Water,
-        Stone
+        Stone,
+        Oil
     }
 
     public MaterialBrush(){
         size = 1;
-        Material = Materials.Sand;
+        material = Materials.Sand;
     }
 
     public void setMaterial(Materials material){
-        this.Material = material;
+        this.material = material;
     }
 
     public void setSize(int size){
@@ -29,6 +30,8 @@ public class MaterialBrush {
     }
 
     public void decreaseSize(){
-        size--;
+        if(size > 0){
+            size--; 
+        }
     }
 }

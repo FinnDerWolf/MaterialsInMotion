@@ -3,7 +3,6 @@ package Logik;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
@@ -12,41 +11,42 @@ import Materials.Model.*;
 
 public class Game extends JFrame{
     //Finals
-    final static int WIDTH = 80;
-    final static int HEIGHT = 80;
-    final static int WIDTHMODIFIER = 10;
-    final static int HEIGHTMODIFIER = 10;
-    final static int DELAY = 80;
+    final static String TITLE = "Materials in Motion / prototype 1";
+    final static int WIDTH = 100;
+    final static int HEIGHT = 100;
+    final static int WIDTHMODIFIER = 8;
+    final static int HEIGHTMODIFIER = 8;
+    final static int DELAY = 20;
 
     //Ui Variables
-    GameMouseListener MouseListener;
-    GameKeyListener KeyListener;
-    private BufferedImage buffer;
-    private Graphics2D bufferGraphics;
+    private GameMouseListener mouseListener;
+    private GameKeyListener keyListener;
 
     //Game Variables
     boolean running = true;
     MaterialBase[][] itemMap;
     Color[][] colorMap;
     Timer timer;
-    MaterialBrush Brush;
+    MaterialBrush brush;
 
-    public Game(){
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Initialize();
-            }
-        }); 
+    private boolean temp;
 
+    public Game(boolean t){
+        temp = t;
         timer = new Timer(DELAY, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                Loop();
+                executeLoop();
             }
         });
+    }
 
+    /**
+     * Run this instane of game
+     */
+    public void run(){
+        initialize();
         startLoop();
     }
 
@@ -62,29 +62,26 @@ public class Game extends JFrame{
     /**
      * Sets up the Enviroment
      */
-    public void Initialize(){
-        InitializeGameVariables();
+    public void initialize(){
+        initializeGameVariables();
 
-        MouseListener = new GameMouseListener(this, WIDTHMODIFIER, HEIGHTMODIFIER);
-        this.addMouseListener(MouseListener);
-        this.addMouseMotionListener(MouseListener);
+        mouseListener = new GameMouseListener(this, WIDTHMODIFIER, HEIGHTMODIFIER);
+        this.addMouseListener(mouseListener);
+        this.addMouseMotionListener(mouseListener);
 
-        KeyListener = new GameKeyListener(Brush);
-        this.addKeyListener(KeyListener);
+        keyListener = new GameKeyListener(brush);
+        this.addKeyListener(keyListener);
 
-        CreateGui(); 
+        createGui(); 
     }
 
     /**
      * Creates the Gui
      */
-    private void CreateGui(){
-        setTitle("MaterialsInMotion Pre Alpha");
+    private void createGui(){
+        setTitle(TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH*WIDTHMODIFIER, HEIGHT*HEIGHTMODIFIER);
-
-        buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-        bufferGraphics = buffer.createGraphics();
 
         setFocusable(true);
         requestFocusInWindow();
@@ -94,8 +91,8 @@ public class Game extends JFrame{
     /**
      * Initializes game variables
      */
-    private void InitializeGameVariables(){
-        Brush = new MaterialBrush();
+    private void initializeGameVariables(){
+        brush = new MaterialBrush();
 
         itemMap = new MaterialBase[HEIGHT][WIDTH];
         colorMap = new Color[HEIGHT][WIDTH];
@@ -115,7 +112,7 @@ public class Game extends JFrame{
     /**
      * Main gameloop
      */
-    private void Loop(){
+    private void executeLoop(){
         //System.out.println("Loop");
         updateMap();
 
@@ -124,27 +121,58 @@ public class Game extends JFrame{
         repaint();
     }
 
+    /**
+     * Updates the itemMap
+     */
     private void updateMap() {
-        //TODO
+        //TODO Make more efficient
         int xIndex = 0;
         int yIndex = 0;
         boolean allhandled = false;
 
-        while(!allhandled){
-            allhandled = true;
+        //top to buttom
+        if(temp){
+            while(!allhandled){
+                allhandled = true;
 
-            for(int row = yIndex; row < itemMap.length; row++){
-                for(int collumn = xIndex; collumn < itemMap[row].length; collumn++){
+                for(int row = yIndex; row < itemMap.length; row++){
+                    for(int collumn = xIndex; collumn < itemMap[row].length; collumn++){
 
-                    if(!itemMap[row][collumn].isHandled){
+                        if(!itemMap[row][collumn].isHandled){
 
-                        allhandled = false;
+                            allhandled = false;
 
-                        itemMap = itemMap[row][collumn].Update(itemMap);
+                            itemMap = itemMap[row][collumn].Update(itemMap);
 
-                        colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+                            colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
 
-                        collumn --;
+                            collumn --;
+                        }
+                    }
+                }
+            }
+        }
+        //Buttom to top
+        else{
+            xIndex = itemMap.length - 1;
+            yIndex = itemMap[0].length - 1;
+
+            while(!allhandled){
+                allhandled = true;
+
+                for(int row = yIndex; row >= 0; row--){
+                    for(int collumn = xIndex; collumn >= 0; collumn--){
+
+                        if(!itemMap[row][collumn].isHandled){
+
+                            allhandled = false;
+
+                            itemMap = itemMap[row][collumn].Update(itemMap);
+
+                            colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                            collumn ++;
+                        }
                     }
                 }
             }
@@ -157,6 +185,9 @@ public class Game extends JFrame{
         }
     }
 
+    /**
+     * Updates the colorMap
+     */
     private void updateColorMap(){
         for(int row = 0; row < itemMap.length; row++){
             for(int collumn = 0; collumn < itemMap[row].length; collumn++){
@@ -167,33 +198,55 @@ public class Game extends JFrame{
         }
     }
 
-    public void spawnMaterial(int xCord, int yCord){
+    /**
+     * Places materials at a certain location using the brushes parameters
+     */
+    public void useBrush(int xCord, int yCord){
         MaterialBase tempMaterial = new Sand(xCord, yCord);
 
-        switch(Brush.Material){
-            case Sand: 
-                tempMaterial = new Sand(xCord, yCord);
-                break;
-            case Water: 
-                tempMaterial = new Water(xCord, yCord);
-                break;
-            case Air: 
-                tempMaterial = new Air(xCord, yCord);
-                break;
-            case Stone: 
-                tempMaterial = new Stone(xCord, yCord);
-                break;
+        
+        
+        //TODO Handle brush size
+        for(int rowIndex = yCord - brush.size; rowIndex <= yCord + brush.size; rowIndex++){
+            for(int collumnIndex = xCord - brush.size; collumnIndex <= xCord + brush.size; collumnIndex++){
+                //check if field exists
+                if(rowIndex > itemMap.length-1 || rowIndex < 0 || collumnIndex > itemMap[0].length-1 || collumnIndex < 0){
+                    continue;
+                }
+
+                //Create new material
+                switch(brush.material){
+                    case Sand: 
+                        tempMaterial = new Sand(collumnIndex, rowIndex);
+                        break;
+                    case Water: 
+                        tempMaterial = new Water(collumnIndex, rowIndex);
+                        break;
+                    case Air: 
+                        tempMaterial = new Air(collumnIndex, rowIndex);
+                        break;
+                    case Stone: 
+                        tempMaterial = new Stone(collumnIndex, rowIndex);
+                        break;
+                    case Oil: 
+                        tempMaterial = new Oil(collumnIndex, rowIndex);
+                        break;
+                }
+                //spawn material in right place
+                itemMap[rowIndex][collumnIndex] = tempMaterial;
+
+                //colorMap[rowIndex][collumnIndex] = tempMaterial.BaseColor;
+            }
         }
+        //itemMap[yCord][xCord] = tempMaterial;
 
-        itemMap[yCord][xCord] = tempMaterial;
-
-        colorMap[yCord][xCord] = tempMaterial.BaseColor;
+        //colorMap[yCord][xCord] = tempMaterial.BaseColor;
 
     }
 
     @Override
     public void paint(java.awt.Graphics g) {
-
+        //TODO switch to using buffer graphics?
         for (int row = 0; row < colorMap.length; row++) {
             for (int collumn = 0; collumn < colorMap[row].length; collumn++) {
 

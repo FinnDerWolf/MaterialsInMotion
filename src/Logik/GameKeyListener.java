@@ -29,6 +29,9 @@ public class GameKeyListener extends KeyAdapter{
             case 52:
                 influencedBrush.setMaterial(Materials.Stone);
                 break;
+            case 53:
+                influencedBrush.setMaterial(Materials.Oil);
+                break;
             case KeyEvent.VK_UP:
                 influencedBrush.increaseSize();
                 break;

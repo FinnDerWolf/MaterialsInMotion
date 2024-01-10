@@ -5,13 +5,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class GameMouseListener implements MouseListener, MouseMotionListener{
-    private final Game Parent;
+    private final Game parent;
 
     public int widthModifier;
     public int heightModifier;
     
     public GameMouseListener(Game parent, int widthModifier, int heightModifier){
-        this.Parent = parent;
+        this.parent = parent;
 
         this.widthModifier = widthModifier;
         this.heightModifier = heightModifier;
@@ -28,7 +28,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener{
         var x = (int)Math.floor(e.getX() / widthModifier);
         var y = (int)Math.floor(e.getY()/ heightModifier);
 
-        Parent.spawnMaterial(x, y);
+        parent.useBrush(x, y);
 
         System.out.println("("+x +"|"+ y +") "+ e.getPoint());
     }
@@ -38,7 +38,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener{
         var x = (int)Math.floor(e.getX() / widthModifier);
         var y = (int)Math.floor(e.getY()/ heightModifier);
 
-        Parent.spawnMaterial(x, y);
+        parent.useBrush(x, y);
     }
 
     @Override
