@@ -126,8 +126,8 @@ public class Game extends JFrame{
      */
     private void updateMap() {
         //TODO Make more efficient
-        int xIndex = 0;
-        int yIndex = 0;
+        int yIndexMax = itemMap.length - 1;
+        int xIndexMax = itemMap[0].length - 1;
         boolean allhandled = false;
 
         //top to buttom
@@ -135,18 +135,41 @@ public class Game extends JFrame{
             while(!allhandled){
                 allhandled = true;
 
-                for(int row = yIndex; row < itemMap.length; row++){
-                    for(int collumn = xIndex; collumn < itemMap[row].length; collumn++){
+                //Top to bottom
+                for(int row = 0; row < itemMap.length; row++){
 
-                        if(!itemMap[row][collumn].isHandled){
+                    var randomInt = Math.round(Math.random());
 
-                            allhandled = false;
+                    if(randomInt > 0){
+                        //left to right
+                        for(int collumn = 0; collumn < itemMap[row].length; collumn++){
 
-                            itemMap = itemMap[row][collumn].Update(itemMap);
+                            if(!itemMap[row][collumn].isHandled){
 
-                            colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+                                allhandled = false;
 
-                            collumn --;
+                                itemMap = itemMap[row][collumn].Update(itemMap);
+
+                                colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                                collumn --;
+                            }
+                        }
+                    }
+                    else{
+                        //left to right
+                        for(int collumn = xIndexMax; collumn >= 0; collumn--){
+
+                            if(!itemMap[row][collumn].isHandled){
+
+                                allhandled = false;
+
+                                itemMap = itemMap[row][collumn].Update(itemMap);
+
+                                colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                                collumn ++;
+                            }
                         }
                     }
                 }
@@ -154,14 +177,12 @@ public class Game extends JFrame{
         }
         //Buttom to top
         else{
-            xIndex = itemMap.length - 1;
-            yIndex = itemMap[0].length - 1;
 
             while(!allhandled){
                 allhandled = true;
 
-                for(int row = yIndex; row >= 0; row--){
-                    for(int collumn = xIndex; collumn >= 0; collumn--){
+                for(int row = yIndexMax; row >= 0; row--){
+                    for(int collumn = xIndexMax; collumn >= 0; collumn--){
 
                         if(!itemMap[row][collumn].isHandled){
 
@@ -178,8 +199,8 @@ public class Game extends JFrame{
             }
         }
 
-        for(int row = yIndex; row < itemMap.length; row++){
-            for(int collumn = xIndex; collumn < itemMap[row].length; collumn++){
+        for(int row = 0; row < itemMap.length; row++){
+            for(int collumn = 0; collumn < itemMap[row].length; collumn++){
                 itemMap[row][collumn].isHandled = false;
             }
         }
