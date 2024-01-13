@@ -126,76 +126,15 @@ public class Game extends JFrame{
      */
     private void updateMap() {
         //TODO Make more efficient
-        int yIndexMax = itemMap.length - 1;
-        int xIndexMax = itemMap[0].length - 1;
         boolean allhandled = false;
 
         //top to buttom
         if(temp){
             while(!allhandled){
-                allhandled = true;
+                //var randomInt = Math.round(Math.random());
+                var randomInt = 0;
 
-                //Top to bottom
-                for(int row = 0; row < itemMap.length; row++){
-
-                    var randomInt = Math.round(Math.random());
-
-                    if(randomInt > 0){
-                        //left to right
-                        for(int collumn = 0; collumn < itemMap[row].length; collumn++){
-
-                            if(!itemMap[row][collumn].isHandled){
-
-                                allhandled = false;
-
-                                itemMap = itemMap[row][collumn].Update(itemMap);
-
-                                colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
-
-                                collumn --;
-                            }
-                        }
-                    }
-                    else{
-                        //left to right
-                        for(int collumn = xIndexMax; collumn >= 0; collumn--){
-
-                            if(!itemMap[row][collumn].isHandled){
-
-                                allhandled = false;
-
-                                itemMap = itemMap[row][collumn].Update(itemMap);
-
-                                colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
-
-                                collumn ++;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //Buttom to top
-        else{
-
-            while(!allhandled){
-                allhandled = true;
-
-                for(int row = yIndexMax; row >= 0; row--){
-                    for(int collumn = xIndexMax; collumn >= 0; collumn--){
-
-                        if(!itemMap[row][collumn].isHandled){
-
-                            allhandled = false;
-
-                            itemMap = itemMap[row][collumn].Update(itemMap);
-
-                            colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
-
-                            collumn ++;
-                        }
-                    }
-                }
+                allhandled = randomInt > 0 ? updateTopToBottom() : updateBottomToTop();
             }
         }
 
@@ -204,6 +143,92 @@ public class Game extends JFrame{
                 itemMap[row][collumn].isHandled = false;
             }
         }
+    }
+
+    private boolean updateTopToBottom(){
+        boolean result = true;
+        //Top to bottom
+        for(int row = 0; row < itemMap.length; row++){
+
+            var randomInt = Math.round(Math.random());
+
+            if(randomInt > 0){
+                //left to right
+                for(int collumn = 0; collumn < itemMap[row].length; collumn++){
+
+                    if(!itemMap[row][collumn].isHandled){
+
+                        result = false;
+
+                        itemMap = itemMap[row][collumn].Update(itemMap);
+
+                        colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                        collumn --;
+                    }
+                }
+            }
+            else{
+                //right to left
+                for(int collumn = itemMap[row].length - 1; collumn >= 0; collumn--){
+
+                    if(!itemMap[row][collumn].isHandled){
+
+                        result = false;
+
+                        itemMap = itemMap[row][collumn].Update(itemMap);
+
+                        colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                        collumn ++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean updateBottomToTop(){
+        boolean result = true;
+        //Bottom to Top
+        for(int row = itemMap.length-1; row >= 0; row--){
+
+            var randomInt = Math.round(Math.random());
+
+            if(randomInt > 0){
+                //left to right
+                for(int collumn = 0; collumn < itemMap[row].length; collumn++){
+
+                    if(!itemMap[row][collumn].isHandled){
+
+                        result = false;
+
+                        itemMap = itemMap[row][collumn].Update(itemMap);
+
+                        colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                        collumn --;
+                    }
+                }
+            }
+            else{
+                //right to left
+                for(int collumn = itemMap[row].length - 1; collumn >= 0; collumn--){
+
+                    if(!itemMap[row][collumn].isHandled){
+
+                        result = false;
+
+                        itemMap = itemMap[row][collumn].Update(itemMap);
+
+                        colorMap[row][collumn] = itemMap[row][collumn].BaseColor;
+
+                        collumn ++;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**
