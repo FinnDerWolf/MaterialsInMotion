@@ -132,7 +132,7 @@ public class Game extends JFrame{
         if(temp){
             while(!allhandled){
                 //var randomInt = Math.round(Math.random());
-                var randomInt = 0;
+                var randomInt = 1;
 
                 allhandled = randomInt > 0 ? updateTopToBottom() : updateBottomToTop();
             }
