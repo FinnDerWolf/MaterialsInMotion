@@ -78,15 +78,36 @@ public class Game extends JFrame{
     /**
      * Creates the Gui
      */
-    private void createGui(){
-        setTitle(TITLE);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(WIDTH*WIDTHMODIFIER, HEIGHT*HEIGHTMODIFIER);
+    private void createGui() {
+    setTitle(TITLE);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(WIDTH * WIDTHMODIFIER, HEIGHT * HEIGHTMODIFIER + 60); // + space for selector
 
-        setFocusable(true);
-        requestFocusInWindow();
-        setVisible(true);
-    }
+    setLayout(new BorderLayout());
+
+    JPanel canvasPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            paintGame(g);
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(WIDTH * WIDTHMODIFIER, HEIGHT * HEIGHTMODIFIER);
+        }
+    };
+
+    MaterialSelectorPanel selectorPanel = new MaterialSelectorPanel(brush);
+    this.add(selectorPanel, BorderLayout.NORTH);
+    this.add(canvasPanel, BorderLayout.CENTER);
+
+    setFocusable(true);
+    requestFocusInWindow();
+    setVisible(true);
+}
+
+    
 
     /**
      * Initializes game variables
@@ -290,16 +311,12 @@ public class Game extends JFrame{
 
     }
 
-    @Override
-    public void paint(java.awt.Graphics g) {
-        //TODO switch to using buffer graphics?
-        for (int row = 0; row < colorMap.length; row++) {
-            for (int collumn = 0; collumn < colorMap[row].length; collumn++) {
-
-                g.setColor(colorMap[row][collumn]);
-
-                g.fillRect(collumn * WIDTHMODIFIER, row * HEIGHTMODIFIER, WIDTHMODIFIER, HEIGHTMODIFIER);
-            }
+    public void paintGame(Graphics g) {
+    for (int row = 0; row < colorMap.length; row++) {
+        for (int col = 0; col < colorMap[row].length; col++) {
+            g.setColor(colorMap[row][col]);
+            g.fillRect(col * WIDTHMODIFIER, row * HEIGHTMODIFIER, WIDTHMODIFIER, HEIGHTMODIFIER);
         }
     }
+}
 }
