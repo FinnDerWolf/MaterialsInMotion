@@ -65,7 +65,7 @@ public class Game extends JFrame{
     public void initialize(){
         initializeGameVariables();
 
-        mouseListener = new GameMouseListener(this, WIDTHMODIFIER, HEIGHTMODIFIER);
+        mouseListener = new GameMouseListener(this);
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
 
@@ -312,11 +312,15 @@ public class Game extends JFrame{
     }
 
     public void paintGame(Graphics g) {
+    int cellWidth = getWidth() / WIDTH;
+    int cellHeight = getHeight() / HEIGHT;
+
     for (int row = 0; row < colorMap.length; row++) {
         for (int col = 0; col < colorMap[row].length; col++) {
             g.setColor(colorMap[row][col]);
-            g.fillRect(col * WIDTHMODIFIER, row * HEIGHTMODIFIER, WIDTHMODIFIER, HEIGHTMODIFIER);
+            g.fillRect(col * cellWidth, row * cellHeight, cellWidth, cellHeight);
         }
     }
 }
+
 }
