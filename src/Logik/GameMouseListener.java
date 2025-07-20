@@ -7,14 +7,11 @@ import java.awt.event.MouseMotionListener;
 public class GameMouseListener implements MouseListener, MouseMotionListener{
     private final Game parent;
 
-    public int widthModifier;
-    public int heightModifier;
+    // public int widthModifier;
+    // public int heightModifier;
     
-    public GameMouseListener(Game parent, int widthModifier, int heightModifier){
-        this.parent = parent;
-
-        this.widthModifier = widthModifier;
-        this.heightModifier = heightModifier;
+    public GameMouseListener(Game parent) {
+    this.parent = parent;
     }
     //Interface implementation
     @Override
@@ -25,18 +22,23 @@ public class GameMouseListener implements MouseListener, MouseMotionListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        var x = (int)Math.floor(e.getX() / widthModifier);
-        var y = (int)Math.floor(e.getY()/ heightModifier);
+        int cellWidth = parent.getWidth() / Game.WIDTH;
+        int cellHeight = parent.getHeight() / Game.HEIGHT;
+
+        int x = e.getX() / cellWidth;
+        int y = e.getY() / cellHeight;
 
         parent.useBrush(x, y);
 
-        System.out.println("("+x +"|"+ y +") "+ e.getPoint());
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        var x = (int)Math.floor(e.getX() / widthModifier);
-        var y = (int)Math.floor(e.getY()/ heightModifier);
+        int cellWidth = parent.getWidth() / Game.WIDTH;
+        int cellHeight = parent.getHeight() / Game.HEIGHT;
+
+        int x = e.getX() / cellWidth;
+        int y = e.getY() / cellHeight;
 
         parent.useBrush(x, y);
     }
